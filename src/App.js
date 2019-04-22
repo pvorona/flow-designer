@@ -1,44 +1,106 @@
+// @flow
+
 import React, { Component } from 'react';
 import './App.css';
 
-function createTask () {
+type ComponentTypeString =
+  | 'task'
+  | 'condition'
+  | 'flow'
+
+type ComponentType = {
+  type: ComponentTypeString,
+  id: string | number,
+}
+
+type ConditionType = ComponentType & {
+  left: ComponentType,
+  right: ComponentType,
+}
+
+type FlowType = ComponentType & {
+  components: Array<ComponentType>
+}
+
+type PositionType = {
+  x: number,
+  y: number,
+}
+
+type Size = {
+  width: number,
+  height: number,
+}
+
+function createTask () : ComponentType {
   return {
     type: 'task',
-    title: 'Extract',
+    title: 'Execution',
   }
 }
 
-function createPositionedTask (row) {
-  return {
-    ...createTask(),
-    position: calculateTaskPosition(row),
-  }
-}
-
-function calculateTaskPosition (row) {
-  return {
-    x: 50,
-    y: row * 50 + row * 20,
-    width: 100,
-    height: 50,
-  }
-}
-
-function createCondition (left, right, row) {
+function createCondition (
+  left: ComponentType,
+  right: ComponentType,
+) : ConditionType {
   return {
     type: 'condition',
     left,
     right,
-    position: calculateTaskPosition(row),
   }
 }
 
+export const taskHeight = 10
+export const horizontalOffset = 50
+
+function calculatePosition (
+  verticalLevel: number,
+  horizontalLayer: number = 0,
+) : PositionType {
+  return {
+    x: horizontalOffset * horizontalLayer,
+    y: verticalLevel * taskHeight,
+  }
+}
+
+export function calculateGeometry (
+  flow: Array<ComponentType>,
+  level: number = 0,
+  horizontalLayer: number = 0,
+) : PositionType {
+  const geometry = {}
+  for (const component of flow) {
+    if (component.type === 'flow') {
+      const flowGeometry = component.elements.reduce((geometry, component, index) => ({
+        ...geometry,
+        [component.id]: calculateGeometry(component, index),
+      }), {})
+      Object.assign(geometry, flowGeometry)
+    } else if (component.type === 'task') {
+      geometry[component.id] = calculatePosition(level, horizontalLayer)
+      level += 1
+    } else if (component.type === 'condition') {
+      geometry[component.id] = calculatePosition(level, horizontalLayer)
+      const leftBranchGeometry = calculateGeometry(
+        [component.left],
+        level + 1,
+        horizontalLayer - 1,
+      )
+      const rightBranchGeometry = calculateGeometry(
+        [component.right],
+        level + 1,
+        horizontalLayer + 1,
+      )
+      Object.assign(geometry, leftBranchGeometry, rightBranchGeometry)
+      level += leftBranchGeometry.level - level
+    }
+  }
+  geometry.level = level
+  return geometry
+}
+
 const flow = [
-  createPositionedTask(0),
   createCondition(createTask(), createTask(), 1),
-  createPositionedTask(2),
-  createPositionedTask(3),
-  createPositionedTask(4),
 ]
 // const flow = [1, 1, 1, 1].map((_, index) => createTask(index))
 
