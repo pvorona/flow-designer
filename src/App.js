@@ -63,40 +63,45 @@ function calculatePosition (
   }
 }
 
+// const match = (condition) => (handlers) => handlers[condition]()
+// match(component.type)({
+//   flow: () =>
+//   task: () =>
+//   condition: () =>
+// })
+
 export function calculateGeometry (
-  flow: Array<ComponentType>,
+  component: ComponentType,
   level: number = 0,
   horizontalLayer: number = 0,
 ) : PositionType {
-  const geometry = {}
-  for (const component of flow) {
-    if (component.type === 'flow') {
-      const flowGeometry = component.elements.reduce((geometry, component, index) => ({
-        ...geometry,
-        [component.id]: calculateGeometry(component, index),
-      }), {})
-      Object.assign(geometry, flowGeometry)
-    } else if (component.type === 'task') {
-      geometry[component.id] = calculatePosition(level, horizontalLayer)
-      level += 1
-    } else if (component.type === 'condition') {
-      geometry[component.id] = calculatePosition(level, horizontalLayer)
-      const leftBranchGeometry = calculateGeometry(
-        [component.left],
-        level + 1,
-        horizontalLayer - 1,
-      )
-      const rightBranchGeometry = calculateGeometry(
-        [component.right],
-        level + 1,
-        horizontalLayer + 1,
-      )
-      Object.assign(geometry, leftBranchGeometry, rightBranchGeometry)
-      level += leftBranchGeometry.level - level
+  if (component.type === 'flow') {
+    return component.elements.reduce((geometry, component) => ({
+      ...geometry,
+      ...calculateGeometry(component, geometry.level),
+    }), { level: 0 })
+  } else if (component.type === 'task') {
+    return {
+      [component.id]: calculatePosition(level, horizontalLayer),
+      level: level + 1,
     }
+  } else if (component.type === 'condition') {
+    const geometry = {}
+    geometry[component.id] = calculatePosition(level, horizontalLayer)
+    const leftBranchGeometry = calculateGeometry(
+      component.left,
+      level + 1,
+      horizontalLayer - 1,
+    )
+    const rightBranchGeometry = calculateGeometry(
+      component.right,
+      level + 1,
+      horizontalLayer + 1,
+    )
+    Object.assign(geometry, leftBranchGeometry, rightBranchGeometry)
+    geometry.level = leftBranchGeometry.level
+    return geometry
   }
-  geometry.level = level
-  return geometry
 }
 
 const flow = [

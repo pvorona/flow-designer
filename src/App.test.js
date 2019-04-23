@@ -8,7 +8,7 @@ import { calculateGeometry, taskHeight } from './App'
 // 7   8
 //     6
 it('geometry', () => {
-  const flow = [{
+  const elements = [{
     type: 'task',
     id: 1,
   }, {
@@ -37,6 +37,7 @@ it('geometry', () => {
     type: 'task',
     id: 6,
   }]
+  const flow = { elements, type: 'flow' }
   const geometry = calculateGeometry(flow)
   expect(geometry).toStrictEqual({
     1: { x:    0, y: 0 * taskHeight },
