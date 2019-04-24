@@ -1,6 +1,5 @@
 // @flow
 
-import React, { Component } from 'react';
 import './App.css';
 
 type ComponentTypeString =
@@ -8,46 +7,45 @@ type ComponentTypeString =
   | 'condition'
   | 'flow'
 
-type ComponentType = {
-  type: ComponentTypeString,
-  id: string | number,
+type IdType = string | number
+
+type ComponentBase = {
+  // type: string,
+  id: IdType,
 }
 
-type ConditionType = ComponentType & {
-  left: ComponentType,
-  right: ComponentType,
+type ComponentsType =
+  | FlowType
+  | TaskType
+  | ConditionType
+
+type TaskType = ComponentBase & {
+  type: 'task'
 }
 
-type FlowType = ComponentType & {
-  components: Array<ComponentType>
+type ConditionType = ComponentBase & {
+  type: 'condition',
+  left: ComponentsType,
+  right: ComponentsType,
 }
 
-type PositionType = {
+type FlowType = ComponentBase & {
+  type: 'flow',
+  components: Array<ComponentsType>,
+}
+
+type CoordsType = {
   x: number,
   y: number,
+}
+
+type PositionType = CoordsType & {
+  level: number,
 }
 
 type Size = {
   width: number,
   height: number,
-}
-
-function createTask () : ComponentType {
-  return {
-    type: 'task',
-    title: 'Execution',
-  }
-}
-
-function createCondition (
-  left: ComponentType,
-  right: ComponentType,
-) : ConditionType {
-  return {
-    type: 'condition',
-    left,
-    right,
-  }
 }
 
 export const taskHeight = 10
@@ -56,7 +54,7 @@ export const horizontalOffset = 50
 function calculatePosition (
   verticalLevel: number,
   horizontalLayer: number = 0,
-) : PositionType {
+) : CoordsType {
   return {
     x: horizontalOffset * horizontalLayer,
     y: verticalLevel * taskHeight,
@@ -64,19 +62,19 @@ function calculatePosition (
 }
 
 // const match = (condition) => (handlers) => handlers[condition]()
-// match(component.type)({
-//   flow: () =>
-//   task: () =>
-//   condition: () =>
-// })
+
+type Geometry = {
+  [IdType]: PositionType,
+  level: number,
+}
 
 export function calculateGeometry (
-  component: ComponentType,
+  component: ComponentsType,
   level: number = 0,
   horizontalLayer: number = 0,
-) : PositionType {
+) : Geometry {
   if (component.type === 'flow') {
-    return component.elements.reduce((geometry, component) => ({
+    return component.components.reduce((geometry, component) => ({
       ...geometry,
       ...calculateGeometry(component, geometry.level),
     }), { level: 0 })
@@ -86,75 +84,77 @@ export function calculateGeometry (
       level: level + 1,
     }
   } else if (component.type === 'condition') {
-    const geometry = {}
-    geometry[component.id] = calculatePosition(level, horizontalLayer)
-    const leftBranchGeometry = calculateGeometry(
+    const leftGeometry = calculateGeometry(
       component.left,
       level + 1,
       horizontalLayer - 1,
     )
-    const rightBranchGeometry = calculateGeometry(
+    const rightGeometry = calculateGeometry(
       component.right,
       level + 1,
       horizontalLayer + 1,
     )
-    Object.assign(geometry, leftBranchGeometry, rightBranchGeometry)
-    geometry.level = leftBranchGeometry.level
-    return geometry
+    return {
+      [component.id]: calculatePosition(level, horizontalLayer),
+      ...leftGeometry,
+      ...rightGeometry,
+      level: Math.max(leftGeometry.level, rightGeometry.level),
+    }
   }
+  throw Error('Invalid component type provided to calculateGeometry.')
 }
 
-const flow = [
-  createCondition(createTask(), createTask(), 1),
-]
-// const flow = [1, 1, 1, 1].map((_, index) => createTask(index))
+// const flow = [
+//   createCondition(createTask(), createTask(), 1),
+// ]
+// // const flow = [1, 1, 1, 1].map((_, index) => createTask(index))
+//
+// const Task = ({ title, position: { x, y, width, height } }) =>
+//   <React.Fragment>
+//     <rect x={x} y={y} width={width} height={height} fill='grey' />
+//     <text x={x} y={y + 15}>{title}</text>
+//   </React.Fragment>
+//
+// const Condition = ({ left, right, position: { x, y } }) =>
+//   <React.Fragment>
+//     <Task
+//       task={left}
+//       position={{
+//         x: x - 100,
+//         y: y,
+//         width: 100,
+//         height: 50,
+//       }}
+//     />
+//     <Task
+//       task={right}
+//       position={{
+//         x: x + 100,
+//         y: y,
+//         width: 100,
+//         height: 50,
+//       }}
+//     />
+//   </React.Fragment>
+//
+// const getComponentRenderer = (component) => ({
+//     task: Task,
+//     condition: Condition,
+//   })[component.type]
+//
+// class App extends Component {
+//   render() {
+//     return (
+//       <div className="container">
+//         <svg height='100%' width='100%' viewbox='0 0 100 100'>
+//           {flow.map(task => {
+//             const ElementComponent = getComponentRenderer(task)
+//             return <ElementComponent {...task} />
+//           })}
+//         </svg>
+//       </div>
+//     )
+//   }
+// }
 
-const Task = ({ title, position: { x, y, width, height } }) =>
-  <React.Fragment>
-    <rect x={x} y={y} width={width} height={height} fill='grey' />
-    <text x={x} y={y + 15}>{title}</text>
-  </React.Fragment>
-
-const Condition = ({ left, right, position: { x, y } }) =>
-  <React.Fragment>
-    <Task
-      task={left}
-      position={{
-        x: x - 100,
-        y: y,
-        width: 100,
-        height: 50,
-      }}
-    />
-    <Task
-      task={right}
-      position={{
-        x: x + 100,
-        y: y,
-        width: 100,
-        height: 50,
-      }}
-    />
-  </React.Fragment>
-
-const getComponentRenderer = (component) => ({
-    task: Task,
-    condition: Condition,
-  })[component.type]
-
-class App extends Component {
-  render() {
-    return (
-      <div className="container">
-        <svg height='100%' width='100%' viewbox='0 0 100 100'>
-          {flow.map(task => {
-            const ElementComponent = getComponentRenderer(task)
-            return <ElementComponent {...task} />
-          })}
-        </svg>
-      </div>
-    )
-  }
-}
-
-export default App;
+// export default App;
