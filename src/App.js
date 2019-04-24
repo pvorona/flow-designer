@@ -1,160 +1,92 @@
 // @flow
-
+import React, { Component } from 'react'
 import './App.css';
+import { connect } from 'react-redux'
+import { taskWidth, taskHeight } from './calculateGeometry'
 
-type ComponentTypeString =
-  | 'task'
-  | 'condition'
-  | 'flow'
+ // const hSpacing = 20
+ // const vSpacing = 40
 
-type IdType = string | number
+const hSpacing = 10
+const vSpacing = 10
+const Task = connect(
+  (state, { id }) => state.geometry[id],
+)(({ x, y }) => {
+  return (
+    <g>
+      <rect
+        x={x + hSpacing}
+        y={y + vSpacing}
+        width={taskWidth - 2 * hSpacing}
+        height={taskHeight - 2 * vSpacing}
+        stroke='grey'
+        fill="none"
+      />
+      {/* <text x={x} y={y + 15}>{title}</text> */}
+    </g>
+  )
+})
 
-type ComponentBase = {
-  // type: string,
-  id: IdType,
-}
+const Condition = connect(
+  (state, { id }) => state.componentsById[id],
+)(({ id, leftId, rightId }) =>
+  <g>
+    <Task
+      id={id}
+    />
+    <ChooseComponent
+      id={leftId}
+    />
+    <ChooseComponent
+      id={rightId}
+    />
+  </g>
+)
 
-type ComponentsType =
-  | FlowType
-  | TaskType
-  | ConditionType
+const Placeholder = connect(
+  (state, { id }) => state.geometry[id],
+)(({ x, y, r = (taskWidth - 2 * hSpacing) / 4 }) =>
+  <circle
+    cx={x + 2 * r}
+    cy={y + r}
+    r={r}
+    fill='none'
+    stroke='grey'
+  />
+)
 
-type TaskType = ComponentBase & {
-  type: 'task'
-}
+const ChooseComponent = connect(
+  (state, { id }) => state.componentsById[id],
+)(({ type, id }) => {
+  const ElementComponent = getComponentRenderer(type)
+  return <ElementComponent id={id} />
+})
 
-type ConditionType = ComponentBase & {
-  type: 'condition',
-  left: ComponentsType,
-  right: ComponentsType,
-}
+const getComponentRenderer = (type) => ({
+    task: Task,
+    condition: Condition,
+    placeholder: Placeholder,
+  })[type]
 
-type FlowType = ComponentBase & {
-  type: 'flow',
-  components: Array<ComponentsType>,
-}
+class App extends Component<any> {
+  render() {
+    const { flow } = this.props
 
-type CoordsType = {
-  x: number,
-  y: number,
-}
-
-type PositionType = CoordsType & {
-  level: number,
-}
-
-type Size = {
-  width: number,
-  height: number,
-}
-
-export const taskHeight = 10
-export const horizontalOffset = 50
-
-function calculatePosition (
-  verticalLevel: number,
-  horizontalLayer: number = 0,
-) : CoordsType {
-  return {
-    x: horizontalOffset * horizontalLayer,
-    y: verticalLevel * taskHeight,
+    return (
+      <div className="container">
+        <svg height='100%' width='100%' viewBox='-400 0 1040 768'>
+          {flow.components.map(component =>
+            <ChooseComponent
+              key={component.id}
+              id={component.id}
+            />
+          )}
+        </svg>
+      </div>
+    )
   }
 }
 
-// const match = (condition) => (handlers) => handlers[condition]()
-
-type Geometry = {
-  [IdType]: PositionType,
-  level: number,
-}
-
-export function calculateGeometry (
-  component: ComponentsType,
-  level: number = 0,
-  horizontalLayer: number = 0,
-) : Geometry {
-  if (component.type === 'flow') {
-    return component.components.reduce((geometry, component) => ({
-      ...geometry,
-      ...calculateGeometry(component, geometry.level),
-    }), { level: 0 })
-  } else if (component.type === 'task') {
-    return {
-      [component.id]: calculatePosition(level, horizontalLayer),
-      level: level + 1,
-    }
-  } else if (component.type === 'condition') {
-    const leftGeometry = calculateGeometry(
-      component.left,
-      level + 1,
-      horizontalLayer - 1,
-    )
-    const rightGeometry = calculateGeometry(
-      component.right,
-      level + 1,
-      horizontalLayer + 1,
-    )
-    return {
-      [component.id]: calculatePosition(level, horizontalLayer),
-      ...leftGeometry,
-      ...rightGeometry,
-      level: Math.max(leftGeometry.level, rightGeometry.level),
-    }
-  }
-  throw Error('Invalid component type provided to calculateGeometry.')
-}
-
-// const flow = [
-//   createCondition(createTask(), createTask(), 1),
-// ]
-// // const flow = [1, 1, 1, 1].map((_, index) => createTask(index))
-//
-// const Task = ({ title, position: { x, y, width, height } }) =>
-//   <React.Fragment>
-//     <rect x={x} y={y} width={width} height={height} fill='grey' />
-//     <text x={x} y={y + 15}>{title}</text>
-//   </React.Fragment>
-//
-// const Condition = ({ left, right, position: { x, y } }) =>
-//   <React.Fragment>
-//     <Task
-//       task={left}
-//       position={{
-//         x: x - 100,
-//         y: y,
-//         width: 100,
-//         height: 50,
-//       }}
-//     />
-//     <Task
-//       task={right}
-//       position={{
-//         x: x + 100,
-//         y: y,
-//         width: 100,
-//         height: 50,
-//       }}
-//     />
-//   </React.Fragment>
-//
-// const getComponentRenderer = (component) => ({
-//     task: Task,
-//     condition: Condition,
-//   })[component.type]
-//
-// class App extends Component {
-//   render() {
-//     return (
-//       <div className="container">
-//         <svg height='100%' width='100%' viewbox='0 0 100 100'>
-//           {flow.map(task => {
-//             const ElementComponent = getComponentRenderer(task)
-//             return <ElementComponent {...task} />
-//           })}
-//         </svg>
-//       </div>
-//     )
-//   }
-// }
-
-// export default App;
+export default connect(
+  ({ flow }) => ({ flow }),
+)(App)
