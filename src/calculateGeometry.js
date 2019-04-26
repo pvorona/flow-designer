@@ -1,19 +1,14 @@
 // @flow
-
-type ComponentTypeString =
-  | 'task'
-  | 'condition'
-  | 'flow'
+import { tribonacci } from './tribonacci'
 
 type IdType = string | number
 
 type ComponentBase = {
-  // type: string,
   id: IdType,
 }
 
-type ComponentsType =
-  | FlowType
+export type ComponentType =
+  | SequenceType
   | TaskType
   | ConditionType
   | PlaceholderType
@@ -28,13 +23,13 @@ type TaskType = ComponentBase & {
 
 type ConditionType = ComponentBase & {
   type: 'condition',
-  left: ComponentsType,
-  right: ComponentsType,
+  left: ComponentType,
+  right: ComponentType,
 }
 
-type FlowType = ComponentBase & {
-  type: 'flow',
-  components: Array<ComponentsType>,
+export type SequenceType = ComponentBase & {
+  type: 'sequence',
+  components: Array<ComponentType>,
 }
 
 type CoordsType = {
@@ -64,18 +59,15 @@ function calculatePosition (
   }
 }
 
-// const match = (condition) => (handlers) => handlers[condition]()
-
 type Geometry = {
   [IdType]: PositionType,
   level: number,
 }
 
-// export const horizontalShift: number = 1
 export const horizontalShift: number = .5
 
 export function calculateHorizontalShift (
-  component: ComponentsType,
+  component: ComponentType,
   shift: number = 0,
 ) : number {
   if (component.type === 'task' || component.type === 'placeholder') {
@@ -90,7 +82,7 @@ export function calculateHorizontalShift (
 }
 
 function calculateNumberOfConditions (
-  component: ComponentsType,
+  component: ComponentType,
   level: number = 0,
 ) : number {
   if (component.type === 'task') {
@@ -104,34 +96,13 @@ function calculateNumberOfConditions (
   throw Error('Invalid component type provided to calculateHorizontalShift.')
 }
 
-function coolStaff (n) {
-  return n
-  // if (n === 1) return 1
-  // if (n === 2) return 2
-  // if (n === 3) return 3
-  // if (n === 4) return 4
-  // return 5
-
-  // if (n < 3) return n
-  // if (n === 3) return 4
-  // return kek(n)
-// 1, 2, 4,
-  // return (3 * (-1 + Math.pow(-1, n)) + 2 * (5 + Math.pow(-1, n)) * n + 14 * Math.pow(n, 2)) / 16
-}
-
-
-function tribonacci (n: number) : number {
-  if (n < 3) return n
-  return tribonacci(n - 1) + tribonacci(n - 2) + 2 * tribonacci(n - 3)
-}
-
 export function calculateGeometry (
-  component: ComponentsType,
+  component: ComponentType,
   level: number = 0,
   horizontalLayer: number = 0,
   shouldShiftAdditionally: bool = false,
 ) : Geometry {
-  if (component.type === 'flow') {
+  if (component.type === 'sequence') {
     return component.components.reduce((geometry, component) => ({
       ...geometry,
       ...calculateGeometry(component, geometry.level),

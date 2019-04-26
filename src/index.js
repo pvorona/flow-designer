@@ -6,9 +6,10 @@ import * as serviceWorker from './serviceWorker';
 import { createStore } from 'redux'
 import { Provider } from 'react-redux'
 import { calculateGeometry } from './calculateGeometry'
+import { normalize } from './normalize'
 
-const flow = {
-  type: 'flow',
+const root = {
+  type: 'sequence',
   components: [
    {
      type: 'task',
@@ -64,26 +65,9 @@ const flow = {
   ],
 }
 const initialState = {
-  flow,
-  componentsById: {
-    1: { type: 'task' },
-    2: { type: 'task' },
-    3: { type: 'condition', leftId: 4, rightId: 5 },
-    4: { type: 'condition', leftId: 7, rightId: 8 },
-    5: { type: 'task' },
-    6: { type: 'task' },
-    7: { type: 'task' },
-    8: { type: 'condition', leftId: 9, rightId: 10 },
-    9: { type: 'condition', leftId: 15, rightId: 16 },
-    10: { type: 'condition', leftId: 11, rightId: 12 },
-    11: { type: 'task' },
-    12: { type: 'condition', leftId: 13, rightId: 14 },
-    13: { type: 'task' },
-    14: { type: 'task' },
-    15: { type: 'task' },
-    16: { type: 'task' },
-  },
-  geometry: calculateGeometry(flow),
+  root,
+  componentsById: normalize(root),
+  geometry: calculateGeometry(root),
 }
 
 const store = createStore((a) => a, initialState)
