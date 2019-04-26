@@ -1,4 +1,4 @@
-// @flow
+// @root
 import React, { Component } from 'react'
 import './App.css';
 import { connect } from 'react-redux'
@@ -70,12 +70,12 @@ const getComponentRenderer = (type) => ({
 
 class App extends Component<any> {
   render() {
-    const { flow } = this.props
+    const { root } = this.props
 
     return (
       <div className="container">
         <svg height='100%' width='100%' viewBox='-400 0 1040 768'>
-          {flow.components.map(component =>
+          {root.components.map(component =>
             <ChooseComponent
               key={component.id}
               id={component.id}
@@ -88,5 +88,5 @@ class App extends Component<any> {
 }
 
 export default connect(
-  ({ flow }) => ({ flow }),
+  ({ root }) => ({ root }),
 )(App)

@@ -19,7 +19,7 @@ it('simple task', () => {
    // 1
    // 2
    expect(calculateGeometry({
-     type: 'flow',
+     type: 'sequence',
      components: [
        { id: 1, type: 'task' },
        { id: 2, type: 'task' },
@@ -111,7 +111,7 @@ it('simple task', () => {
 //     type: 'task',
 //     id: 6,
 //   }]
-//   const flow = { components, type: 'flow' }
+//   const flow = { components, type: 'sequence' }
 //   const geometry = calculateGeometry(flow)
 //   expect(geometry).toStrictEqual({
 //     1: { x:    0, y: 0 * taskHeight },
