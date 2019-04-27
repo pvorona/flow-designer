@@ -1,6 +1,6 @@
 // @flow
 import { tribonacci } from './tribonacci'
-import { taskWidth, taskHeight, horizontalShift } from './constants'
+import { columnWidth, columnHeight, horizontalShift } from './constants'
 
 type IdType = string | number
 
@@ -52,8 +52,8 @@ function calculatePosition (
   horizontalLayer: number = 0,
 ) : CoordsType {
   return {
-    x: horizontalLayer * taskWidth,
-    y: verticalLevel * taskHeight,
+    x: horizontalLayer * columnWidth,
+    y: verticalLevel * columnHeight,
   }
 }
 
@@ -77,16 +77,26 @@ export function calculateMaxBranchingLevel (
   throw Error('Invalid component type provided to calculateHorizontalShift.')
 }
 
-function wow (n) {
+function maxLeft (component, level = 0) : number {
+  if (component.type === 'task' || component.type === 'placeholder') {
+    return level
+  } else if (component.type === 'condition') {
+    return maxLeft(component.left, level + 1)
+  }
+  throw Error('!')
+}
+
+function maxRight (component, level = 0) : number {
+  if (component.type === 'task' || component.type === 'placeholder') {
+    return level
+  } else if (component.type === 'condition') {
+    return maxLeft(component.right, level + 1)
+  }
+  throw Error('!')
+}
+
+function wow (n: number) : number {
   return Math.pow(2, n - 1)
-  // if (n === 1) return 1
-  // if (n === 2) return 2
-  // if (n === 3) return 4
-  // if (n === 4) return 8
-  // if (n === 5) return 16
-  // if (n === 6) return 32
-  // return 1
-  // return tribonacci(n)
 }
 
 export function calculateGeometry (

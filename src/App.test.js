@@ -1,7 +1,7 @@
 import { calculateGeometry } from './calculateGeometry'
-import { taskWidth, taskHeight, horizontalShift } from './constants'
+import { columnWidth, columnHeight, horizontalShift } from './constants'
 
-const shift = horizontalShift * taskWidth
+const shift = horizontalShift * columnWidth
 
 it('simple task', () => {
   // 1
@@ -21,8 +21,8 @@ it('simple task', () => {
        { id: 2, type: 'task' },
      ],
    })).toStrictEqual({
-     1: { x: 0, y: 0 * taskHeight },
-     2: { x: 0, y: 1 * taskHeight },
+     1: { x: 0, y: 0 * columnHeight },
+     2: { x: 0, y: 1 * columnHeight },
      level: 2,
    })
  })
@@ -36,9 +36,9 @@ it('simple task', () => {
       left:  { id: 2, type: 'task' },
       right: { id: 3, type: 'task' },
     })).toStrictEqual({
-      1: { x:      0, y: 0 * taskHeight },
-      2: { x: -shift, y: 1 * taskHeight },
-      3: { x: +shift, y: 1 * taskHeight },
+      1: { x:      0, y: 0 * columnHeight },
+      2: { x: -shift, y: 1 * columnHeight },
+      3: { x: +shift, y: 1 * columnHeight },
       level: 2,
     })
   })
@@ -61,11 +61,11 @@ it('simple task', () => {
         type: 'task',
       },
     })).toStrictEqual({
-      1: { x:  0 * shift, y: 0 * taskHeight },
-      2: { x: -2 * shift, y: 1 * taskHeight },
-      3: { x: -3 * shift, y: 2 * taskHeight },
-      4: { x: -1 * shift, y: 2 * taskHeight },
-      5: { x:  2 * shift, y: 1 * taskHeight },
+      1: { x:  0 * shift, y: 0 * columnHeight },
+      2: { x: -2 * shift, y: 1 * columnHeight },
+      3: { x: -3 * shift, y: 2 * columnHeight },
+      4: { x: -1 * shift, y: 2 * columnHeight },
+      5: { x:  2 * shift, y: 1 * columnHeight },
       level: 3,
     })
   })
@@ -110,14 +110,14 @@ it('simple task', () => {
 //   const flow = { components, type: 'sequence' }
 //   const geometry = calculateGeometry(flow)
 //   expect(geometry).toStrictEqual({
-//     1: { x:    0, y: 0 * taskHeight },
-//     2: { x:    0, y: 1 * taskHeight },
-//     3: { x:    0, y: 2 * taskHeight },
-//     4: { x:  -50, y: 3 * taskHeight },
-//     5: { x:  +50, y: 3 * taskHeight },
-//     7: { x: -100, y: 4 * taskHeight },
-//     8: { x:    0, y: 4 * taskHeight },
-//     6: { x:    0, y: 5 * taskHeight },
+//     1: { x:    0, y: 0 * columnHeight },
+//     2: { x:    0, y: 1 * columnHeight },
+//     3: { x:    0, y: 2 * columnHeight },
+//     4: { x:  -50, y: 3 * columnHeight },
+//     5: { x:  +50, y: 3 * columnHeight },
+//     7: { x: -100, y: 4 * columnHeight },
+//     8: { x:    0, y: 4 * columnHeight },
+//     6: { x:    0, y: 5 * columnHeight },
 //     level: 6,
 //   })
 // })

@@ -95,7 +95,28 @@ export default observer(function App () {
       <svg
         height='100%'
         width='100%'
+        style={{
+          background: '-webkit-repeating-radial-gradient(center center, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1) 1px, transparent 1px, transparent 100%)',
+          backgroundSize: '16px 16px',
+        }}
       >
+      {/* box-shadow: 0 2px 6px 0 rgba(200,196,187,0.5); */}
+        <defs>
+          <filter id="f3" x="-30%" y="-30%" width="200%" height="200%">
+            <feOffset result="offOut" in="SourceAlpha" dx="0" dy="2" />
+            <feColorMatrix
+              type="matrix"
+              result="matrixOut"
+              in="offOut"
+              values="0 1 0 0 0
+                      0 1 0 0 0
+                      0 1 0 0 0
+                      0 1 0 0.2 0"
+            />
+            <feGaussianBlur result="blurOut" in="matrixOut" stdDeviation="3" />
+            <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
+          </filter>
+        </defs>
         {root.components.map(component =>
           <PolymorphicComponent
             key={component.id}

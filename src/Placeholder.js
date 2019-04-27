@@ -1,5 +1,5 @@
 import React from 'react'
-import { taskWidth, taskHeight, hSpacing, vSpacing } from './constants'
+import { columnWidth, columnHeight, hSpacing, vSpacing } from './constants'
 import { observer } from 'mobx-react'
 import { action } from 'mobx'
 
@@ -23,16 +23,15 @@ export const Placeholder = observer(function Placeholder ({ component }) {
 
   return (
     <rect
-      width={taskWidth - 2 * hSpacing}
-      height={taskHeight - 2 * vSpacing}
+      width={columnWidth - 2 * hSpacing}
+      height={columnHeight - 2 * vSpacing}
       style={{
-        transform: `translate(calc(50% + ${x + hSpacing}px), ${y + vSpacing}px)`,
+        transform: `translate(calc(50% + ${x + hSpacing - columnWidth / 2}px), ${y + vSpacing}px)`,
         transition: 'transform .2s ease-in-out',
       }}
-      fill='red'
-      stroke='black'
+      fill='white'
+      filter="url(#f3)"
       onClick={magic}
     />
   )
-  }
-)
+})
