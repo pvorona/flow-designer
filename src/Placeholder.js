@@ -2,8 +2,14 @@ import React from 'react'
 import { columnWidth, columnHeight, hSpacing, vSpacing } from './constants'
 import { observer } from 'mobx-react'
 import { action } from 'mobx'
+import styles from './Placeholder.module.css'
 
 let uniqId = Date.now()
+
+const circleR = (columnHeight - 2 * vSpacing) / 2
+const lineStroke = '#888888'
+const iconPadding = 15
+const strokeWidth = 3
 
 export const Placeholder = observer(function Placeholder ({ component }) {
   const { coords: { x, y } } = component
@@ -22,16 +28,38 @@ export const Placeholder = observer(function Placeholder ({ component }) {
   })
 
   return (
-    <rect
-      width={columnWidth - 2 * hSpacing}
-      height={columnHeight - 2 * vSpacing}
-      style={{
-        transform: `translate(calc(50% + ${x + hSpacing - columnWidth / 2}px), ${y + vSpacing}px)`,
-        transition: 'transform .2s ease-in-out',
-      }}
-      fill='white'
-      filter="url(#f3)"
-      onClick={magic}
-    />
+    <>
+      <circle
+        r={circleR}
+        className={styles.placeholder}
+        style={{
+          transform: `translate(calc(50% + ${x}px), ${y + circleR + vSpacing}px)`,
+        }}
+        filter="url(#f3)"
+        onClick={magic}
+      />
+      <g className={styles.placeholderIcon}>
+        <line
+          style={{
+            transform: 'translateX(50%)',
+          }}
+          strokeWidth={strokeWidth}
+          x1={x}
+          y1={y + vSpacing + iconPadding}
+          x2={x}
+          y2={y + circleR + circleR + vSpacing - iconPadding}
+        />
+        <line
+          style={{
+            transform: 'translateX(50%)',
+          }}
+          strokeWidth={strokeWidth}
+          x1={x - circleR + iconPadding}
+          y1={y + vSpacing + circleR}
+          x2={x + circleR - iconPadding}
+          y2={y + vSpacing + circleR}
+        />
+      </g>
+    </>
   )
 })

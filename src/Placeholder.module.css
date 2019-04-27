@@ -1,0 +1,18 @@
+.placeholder {
+  fill: white;
+  transition: all .15s ease;
+  cursor: pointer;
+
+}
+.placeholder:hover {
+  fill: #535E68;
+}
+
+.placeholderIcon {
+  pointer-events: none;
+  stroke: #888888;
+  transition: all .15s ease;
+}
+.placeholder:hover + .placeholderIcon {
+  stroke: white;
+}
