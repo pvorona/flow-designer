@@ -4,25 +4,25 @@ import type { ComponentType } from './calculateGeometry'
 export function normalize (
   component: ComponentType,
 ) : {} {
-  const componentsById = {}
+  const componentById = {}
 
   if (component.type === 'condition') {
-    componentsById[component.id] = {
+    componentById[component.id] = {
       type: 'condition',
       leftId: component.left.id,
       rightId: component.right.id,
     }
-    Object.assign(componentsById, normalize(component.left))
-    Object.assign(componentsById, normalize(component.right))
-  } else if (component.type === 'task') {
-    componentsById[component.id] = {
-      type: 'task',
+    Object.assign(componentById, normalize(component.left))
+    Object.assign(componentById, normalize(component.right))
+  } else if (component.type === 'task' || component.type === 'placeholder') {
+    componentById[component.id] = {
+      type: component.type,
     }
   } else if (component.type === 'sequence') {
     for (const element of component.components) {
-      Object.assign(componentsById, normalize(element))
+      Object.assign(componentById, normalize(element))
     }
   }
 
-  return componentsById
+  return componentById
 }

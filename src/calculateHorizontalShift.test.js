@@ -1,23 +1,23 @@
 import {
-  calculateHorizontalShift,
+  calculateMaxBranchingLevel,
 } from './calculateGeometry'
 
 it('single task', () => {
-  expect(calculateHorizontalShift({
+  expect(calculateMaxBranchingLevel({
     type: 'task',
     id: 1
   })).toStrictEqual(0)
 })
 
 it('single nested task', () => {
-  expect(calculateHorizontalShift({
+  expect(calculateMaxBranchingLevel({
     type: 'task',
     id: 1
   }, 3)).toStrictEqual(3)
 })
 
 it('single condition', () => {
-  expect(calculateHorizontalShift({
+  expect(calculateMaxBranchingLevel({
     type: 'condition',
     id: 1,
     left: {
@@ -32,7 +32,7 @@ it('single condition', () => {
 })
 
 it('nested condition', () => {
-  expect(calculateHorizontalShift({
+  expect(calculateMaxBranchingLevel({
     type: 'condition',
     id: 1,
     left: {
@@ -53,7 +53,7 @@ it('multiple nested conditions', () => {
   //   2       3
   // 4   5   9   6
   //       7   8
-  expect(calculateHorizontalShift({
+  expect(calculateMaxBranchingLevel({
     type: 'condition',
     id: 1,
     left: {

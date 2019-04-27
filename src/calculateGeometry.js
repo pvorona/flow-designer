@@ -1,5 +1,6 @@
 // @flow
 import { tribonacci } from './tribonacci'
+import { taskWidth, taskHeight, horizontalShift } from './constants'
 
 type IdType = string | number
 
@@ -32,7 +33,7 @@ export type SequenceType = ComponentBase & {
   components: Array<ComponentType>,
 }
 
-type CoordsType = {
+export type CoordsType = {
   x: number,
   y: number,
 }
@@ -45,9 +46,6 @@ type Size = {
   width: number,
   height: number,
 }
-
-export const taskWidth = 50
-export const taskHeight = 50
 
 function calculatePosition (
   verticalLevel: number,
@@ -64,33 +62,16 @@ type Geometry = {
   level: number,
 }
 
-export const horizontalShift: number = .5
-
-export function calculateHorizontalShift (
-  component: ComponentType,
-  shift: number = 0,
-) : number {
-  if (component.type === 'task' || component.type === 'placeholder') {
-    return shift
-  } else if (component.type === 'condition') {
-    return Math.max(
-      calculateHorizontalShift(component.left, shift + 1),
-      calculateHorizontalShift(component.right, shift + 1),
-    )
-  }
-  throw Error('Invalid component type provided to calculateHorizontalShift.')
-}
-
-function calculateNumberOfConditions (
+export function calculateMaxBranchingLevel (
   component: ComponentType,
   level: number = 0,
 ) : number {
-  if (component.type === 'task') {
+  if (component.type === 'task' || component.type === 'placeholder') {
     return level
   } else if (component.type === 'condition') {
     return Math.max(
-      calculateNumberOfConditions(component.left, level + 1),
-      calculateNumberOfConditions(component.right, level + 1),
+      calculateMaxBranchingLevel(component.left, level + 1),
+      calculateMaxBranchingLevel(component.right, level + 1),
     )
   }
   throw Error('Invalid component type provided to calculateHorizontalShift.')
@@ -113,7 +94,7 @@ export function calculateGeometry (
       level: level + 1,
     }
   } else if (component.type === 'condition') {
-    const numberOfConditions = tribonacci(calculateNumberOfConditions(component))
+    const numberOfConditions = tribonacci(calculateMaxBranchingLevel(component))
     const leftGeometry = calculateGeometry(
       component.left,
       level + 1,

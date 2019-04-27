@@ -1,9 +1,5 @@
-import {
-  calculateGeometry,
-  taskHeight,
-  taskWidth,
-  horizontalShift,
-} from './calculateGeometry'
+import { calculateGeometry } from './calculateGeometry'
+import { taskWidth, taskHeight, horizontalShift } from './constants'
 
 const shift = horizontalShift * taskWidth
 

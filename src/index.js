@@ -48,7 +48,7 @@ const root = {
             type: 'condition',
             id: 12,
             left: { id: 13, type: 'task' },
-            right: { id: 14, type: 'task' },
+            right: { id: 14, type: 'placeholder' },
           },
         },
       },
@@ -66,10 +66,10 @@ const root = {
 }
 const initialState = {
   root,
-  componentsById: normalize(root),
-  geometry: calculateGeometry(root),
+  componentIds: [],
+  componentById: normalize(root),
+  coords: calculateGeometry(root),
 }
-
 const store = createStore((a) => a, initialState)
 
 ReactDOM.render(
