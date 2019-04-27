@@ -1,27 +1,18 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import { getComponentById } from './selectors'
 import { Task } from './Task'
 import { PolymorphicComponent } from './PolymorphicComponent'
+import { observer } from 'mobx-react'
 
-const ConditionComponent = ({
-  component: { leftId, rightId },
-  id,
-}) =>
+export const Condition = observer(({ component }) =>
   <g>
     <Task
-      id={id}
+      component={component}
     />
     <PolymorphicComponent
-      id={leftId}
+      component={component.left}
     />
     <PolymorphicComponent
-      id={rightId}
+      component={component.right}
     />
   </g>
-
-export const Condition = connect(
-  (state, { id }) => ({
-    component: getComponentById(id)(state),
-  }),
-)(ConditionComponent)
+)
