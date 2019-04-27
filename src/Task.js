@@ -1,22 +1,22 @@
 // @flow
 import type { CoordsType } from './calculateGeometry'
 import React from 'react'
-import { connect } from 'react-redux'
-import { getCoordsById } from './selectors'
 import { hSpacing, vSpacing, taskWidth, taskHeight } from './constants'
+import { observer } from 'mobx-react'
 
 type Props = {
-  coords: CoordsType,
+  component: {
+    coords: CoordsType,
+  },
 }
 
-const TaskComponent = ({
-  coords: { x, y },
-} : Props) => {
+export const Task = observer(function Task ({ component: { coords: { x, y } } } : Props) {
   return (
     <g>
       <rect
         style={{
           transform: `translate(calc(50% + ${x + hSpacing}px), ${y + vSpacing}px)`,
+          transition: 'transform .2s ease-in-out',
         }}
         width={taskWidth - 2 * hSpacing}
         height={taskHeight - 2 * vSpacing}
@@ -31,10 +31,4 @@ const TaskComponent = ({
       </text>
     </g>
   )
-}
-
-export const Task = connect(
-  (state, { id }) => ({
-    coords: getCoordsById(id)(state),
-  }),
-)(TaskComponent)
+})

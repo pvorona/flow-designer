@@ -77,6 +77,18 @@ export function calculateMaxBranchingLevel (
   throw Error('Invalid component type provided to calculateHorizontalShift.')
 }
 
+function wow (n) {
+  return Math.pow(2, n - 1)
+  // if (n === 1) return 1
+  // if (n === 2) return 2
+  // if (n === 3) return 4
+  // if (n === 4) return 8
+  // if (n === 5) return 16
+  // if (n === 6) return 32
+  // return 1
+  // return tribonacci(n)
+}
+
 export function calculateGeometry (
   component: ComponentType,
   level: number = 0,
@@ -94,16 +106,17 @@ export function calculateGeometry (
       level: level + 1,
     }
   } else if (component.type === 'condition') {
-    const numberOfConditions = tribonacci(calculateMaxBranchingLevel(component))
+    const numberOfConditionsLeft = wow(calculateMaxBranchingLevel(component.left, 1))
+    const numberOfConditionsRight = wow(calculateMaxBranchingLevel(component.right, 1))
     const leftGeometry = calculateGeometry(
       component.left,
       level + 1,
-      horizontalLayer - numberOfConditions * horizontalShift,
+      horizontalLayer - numberOfConditionsLeft * horizontalShift,
     )
     const rightGeometry = calculateGeometry(
       component.right,
       level + 1,
-      horizontalLayer + numberOfConditions * horizontalShift,
+      horizontalLayer + numberOfConditionsRight * horizontalShift,
     )
     return {
       [component.id]: calculatePosition(level, horizontalLayer),

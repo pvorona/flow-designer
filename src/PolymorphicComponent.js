@@ -1,14 +1,8 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import { getComponentById } from './selectors'
 import { typeToComponentMapping } from './typeToComponentMapping'
+import { observer } from 'mobx-react'
 
-export const PolymorphicComponent = connect(
-  (state, { id }) => ({
-    component: getComponentById(id)(state),
-  }),
-)(({ component: { type }, id }) => {
-  const ElementComponent = typeToComponentMapping[type]
-  return <ElementComponent id={id} />
+export const PolymorphicComponent = observer(function PolymorphicComponent ({ component }) {
+  const ElementComponent = typeToComponentMapping[component.type]
+  return <ElementComponent component={component} />
 })
-

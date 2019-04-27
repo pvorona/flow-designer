@@ -1,21 +1,38 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import { getCoordsById } from './selectors'
 import { taskWidth, taskHeight, hSpacing, vSpacing } from './constants'
+import { observer } from 'mobx-react'
+import { action } from 'mobx'
 
-const PlaceholderComponent = ({ coords: { x, y, r = (taskWidth + 2 * hSpacing) / 2 } }) =>
-  <rect
-    width={taskWidth - 2 * hSpacing}
-    height={taskHeight - 2 * vSpacing}
-    style={{
-      transform: `translate(calc(50% + ${x + hSpacing}px), ${y + vSpacing}px)`,
-    }}
-    fill='none'
-    stroke='red'
-  />
+let uniqId = Date.now()
 
-export const Placeholder = connect(
-  (state, { id }) => ({
-    coords: getCoordsById(id)(state),
-  }),
-)(PlaceholderComponent)
+export const Placeholder = observer(function Placeholder ({ component }) {
+  const { coords: { x, y } } = component
+
+  const magic = action(function magicInside () {
+    component.type = 'condition'
+    component.left = {
+      type: 'placeholder',
+      id: ++uniqId,
+    }
+    component.right = {
+      type: 'placeholder',
+      id: ++uniqId,
+    }
+    window.kek()
+  })
+
+  return (
+    <rect
+      width={taskWidth - 2 * hSpacing}
+      height={taskHeight - 2 * vSpacing}
+      style={{
+        transform: `translate(calc(50% + ${x + hSpacing}px), ${y + vSpacing}px)`,
+        transition: 'transform .2s ease-in-out',
+      }}
+      fill='red'
+      stroke='black'
+      onClick={magic}
+    />
+  )
+  }
+)
