@@ -1,3 +1,14 @@
 .container {
   height: 100vh;
 }
+
+.DropdownOption {
+  cursor: pointer;
+  padding: 15px;
+  color: #272B30;
+}
+
+.DropdownOption:hover {
+  background-color: #535E68;
+  color: white;
+}
