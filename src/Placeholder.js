@@ -4,17 +4,17 @@ import { observer } from 'mobx-react'
 import { action } from 'mobx'
 import styles from './Placeholder.module.css'
 
-let uniqId = Date.now()
+let uniqId = 0
 
 const circleR = (columnHeight - 2 * vSpacing) / 2
-const lineStroke = '#888888'
 const iconPadding = 15
 const strokeWidth = 3
 
 export const Placeholder = observer(function Placeholder ({ component }) {
   const { coords: { x, y } } = component
 
-  const magic = action(function magicInside () {
+  const magic = action(function magicInside (e) {
+    e.stopPropagation()
     component.type = 'condition'
     component.left = {
       type: 'placeholder',
@@ -36,7 +36,7 @@ export const Placeholder = observer(function Placeholder ({ component }) {
           transform: `translate(calc(50% + ${x}px), ${y + circleR + vSpacing}px)`,
         }}
         filter="url(#f3)"
-        onClick={magic}
+        onMouseDown={magic}
       />
       <g className={styles.placeholderIcon}>
         <line

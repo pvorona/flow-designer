@@ -1,6 +1,6 @@
 .placeholder {
   fill: white;
-  transition: all .15s ease;
+  transition: fill .15s ease;
   cursor: pointer;
 
 }
@@ -11,7 +11,7 @@
 .placeholderIcon {
   pointer-events: none;
   stroke: #888888;
-  transition: all .15s ease;
+  transition: stroke .15s ease;
 }
 .placeholder:hover + .placeholderIcon {
   stroke: white;
