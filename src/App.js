@@ -73,12 +73,14 @@ const root = observable({
     { type: 'placeholder', id: 0 },
   ],
 })
-let coords = calculateGeometry(root)
+calculateGeometry(root)
+// let coords = calculateGeometry(root)
 
 function recalculateGeometry () {
-  traverseTree(root, (component) => {
-    component.coords = coords[component.id]
-  })
+  calculateGeometry(root)
+  // traverseTree(root, (component) => {
+  //   component.coords = coords[component.id]
+  // })
 }
 
 function traverseTree (component, callback) {
@@ -93,8 +95,9 @@ function traverseTree (component, callback) {
 
 recalculateGeometry()
 window.kek = function () {
-  coords = calculateGeometry(root)
-  recalculateGeometry()
+  calculateGeometry(root)
+  // coords = calculateGeometry(root)
+  // recalculateGeometry()
 }
 
 window.removeComponent = action(function removeComponent (component) {

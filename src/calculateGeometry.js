@@ -77,29 +77,78 @@ export function calculateMaxBranchingLevel (
   throw Error('Invalid component type provided to calculateHorizontalShift.')
 }
 
-function maxLeft (component, level = 0) : number {
+function maxLeftShift (component, level = 0) : number {
   if (component.type === 'task' || component.type === 'placeholder') {
     return level
   } else if (component.type === 'condition') {
-    return maxLeft(component.left, level + 1)
+    return Math.max(
+      maxLeftShift(component.left, level + 1),
+      maxLeftShift(component.right, level - 1),
+    )
   }
   throw Error('!')
 }
 
-function maxRight (component, level = 0) : number {
+function maxRightShift (component, level = 0) : number {
   if (component.type === 'task' || component.type === 'placeholder') {
     return level
   } else if (component.type === 'condition') {
-    return maxLeft(component.right, level + 1)
+    return Math.max(
+      maxRightShift(component.right, level + 1),
+      maxRightShift(component.left, level - 1),
+    )
   }
   throw Error('!')
+}
+
+export function getWidth (component) {
+  return calculateMaxBranchingLevel(component)
+  // return (maxLeftShift(component) + maxRightShift(component)) * horizontalShift
 }
 
 function wow (n: number) : number {
   return Math.pow(2, n - 1)
 }
 
-export function calculateGeometry (
+
+export function calculateGeometry (tree: ComponentType) {
+  if (tree.type === 'sequence') {
+    tree.components.forEach(calculateGeometry)
+  }
+
+  let i = 0
+  calculateGeometryKnuth(tree, 0)
+  centerTree(tree)
+  function calculateGeometryKnuth (tree, depth = 0) {
+    if (tree.type === 'condition' && tree.left) {
+      calculateGeometryKnuth(tree.left, depth + 1)
+    }
+    tree.coords = calculatePosition(
+      depth,
+      i * horizontalShift,
+    )
+    i = i + 1
+    if (tree.type === 'condition' && tree.right) {
+      calculateGeometryKnuth(tree.right, depth + 1)
+    }
+  }
+}
+
+function centerTree (component) {
+  const centerNodeShift = component.coords.x
+  a(component)
+  function a (tree) {
+    if (tree.type === 'condition') {
+      a(tree.left)
+    }
+    tree.coords.x -= centerNodeShift
+    if (tree.type === 'condition') {
+      a(tree.right)
+    }
+  }
+}
+
+export function calculateGeometry1 (
   component: ComponentType,
   level: number = 0,
   horizontalLayer: number = 0,
@@ -116,6 +165,10 @@ export function calculateGeometry (
       level: level + 1,
     }
   } else if (component.type === 'condition') {
+    // const maxRight = maxRightShift(component)
+    // const maxLeft = maxLeftShift(component)
+    // const width = maxRight + maxLeft
+    // console.log({maxLeft, maxRight, width})
     const numberOfConditionsLeft = wow(calculateMaxBranchingLevel(component.left, 1))
     const numberOfConditionsRight = wow(calculateMaxBranchingLevel(component.right, 1))
     const leftGeometry = calculateGeometry(
