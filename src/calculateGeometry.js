@@ -77,6 +77,24 @@ export function calculateMaxBranchingLevel (
   throw Error('Invalid component type provided to calculateHorizontalShift.')
 }
 
+export function getDeepestCondition (
+  component: ComponentType,
+  level: number = 0,
+) : ComponentType {
+  if (component.type === 'task' || component.type === 'placeholder') {
+    return component
+  } else if (component.type === 'condition') {
+    if (calculateMaxBranchingLevel(component.left) > calculateMaxBranchingLevel(component.right)) {
+      return getDeepestCondition(component.left)
+    } else {
+      return getDeepestCondition(component.right)
+    }
+    // be ready for case when depth of left === depth of right
+    // need to retern different branches depending on where this geometry should go
+  }
+  throw Error('Invalid component type provided to calculateHorizontalShift.')
+}
+
 function maxLeftShift (component, level = 0) : number {
   if (component.type === 'task' || component.type === 'placeholder') {
     return level
