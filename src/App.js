@@ -6,6 +6,7 @@ import { observable } from 'mobx'
 import { observer } from 'mobx-react'
 import { calculateGeometry } from './calculateGeometry'
 import { action } from 'mobx'
+import { AutoHideDropdown, Option } from './Dropdown'
 
 /*
 const root = observable({
@@ -113,7 +114,7 @@ window.removeComponent = action(function removeComponent (component) {
 
 const zoomStep = 0.2
 const maxZoom = 1.6
-const minZoom = 0.1
+const minZoom = 0.4
 export const zoomState = observable({
   scale: 1,
   zoomIn () {
@@ -177,6 +178,51 @@ window.hideSidebar = function hideSidebar () {
   sidebarState.visible = false
 }
 
+window.dropdownState = observable({
+  visible: false,
+  position: {
+    left: 0,
+    top: 0,
+  },
+  show () {
+    this.visible = true
+  },
+  setPosition (position) {
+    this.position = position
+  },
+  hide () {
+    this.visible = false
+  },
+})
+
+window.editState = observable({
+  component: undefined,
+  edit (component) {
+    this.component = component
+  }
+})
+
+let uniqId = 0
+
+function createCondition () {
+  window.dropdownState.hide()
+  window.editState.component.type = 'condition'
+  window.editState.component.left = {
+    type: 'placeholder',
+    id: ++uniqId,
+  }
+  window.editState.component.right = {
+    type: 'placeholder',
+    id: ++uniqId,
+  }
+  window.kek()
+}
+
+function createBotTask () {
+  window.dropdownState.hide()
+  window.editState.component.type = 'task'
+}
+
 export default observer(function App () {
   return (
     <div className="container">
@@ -213,6 +259,7 @@ export default observer(function App () {
           transform: `translate(${dragState.translateX + dragState.x - dragState.startX}px, ${dragState.translateY + dragState.y - dragState.startY}px) scale(${zoomState.scale})`,
           transformOrigin: 'center',
           transition: dragState.isDragging ? undefined : 'transform .2s',
+          willChange: 'transform',
         }}>
           {root.components.map(component =>
             <PolymorphicComponent
@@ -272,6 +319,17 @@ export default observer(function App () {
         {/*   </div> */}
         {/* ) : null} */}
       </div>
+      {window.dropdownState.visible ? (
+        <AutoHideDropdown style={{
+          left: window.dropdownState.position.left,
+          top: window.dropdownState.position.top,
+        }}>
+          <Option onClick={createBotTask}>Bot Task</Option>
+          <Option onClick={createBotTask}>Manual Task</Option>
+          <Option onClick={createCondition}>Condition</Option>
+        </AutoHideDropdown>
+      ) : null}
     </div>
   )
 })
+

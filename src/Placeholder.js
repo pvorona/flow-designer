@@ -4,7 +4,6 @@ import { observer } from 'mobx-react'
 import { action } from 'mobx'
 import styles from './Placeholder.module.css'
 
-let uniqId = 0
 
 const circleR = (columnHeight - 2 * vSpacing) / 2
 const iconPadding = 15
@@ -12,31 +11,28 @@ const strokeWidth = 3
 
 export const Placeholder = observer(function Placeholder ({ component }) {
   const { coords: { x, y } } = component
+  const element = React.createRef()
 
   const magic = action(function magicInside (e) {
-    e.stopPropagation()
-    component.type = 'condition'
-    component.left = {
-      type: 'placeholder',
-      id: ++uniqId,
-    }
-    component.right = {
-      type: 'placeholder',
-      id: ++uniqId,
-    }
-    window.kek()
+    window.dropdownState.show()
+    window.dropdownState.setPosition({
+      left: element.current.getBoundingClientRect().left + circleR,
+      top: element.current.getBoundingClientRect().top + circleR * 2 + 10,
+    })
+    window.editState.edit(component)
   })
 
   return (
     <>
       <circle
+        ref={element}
         r={circleR}
         className={styles.placeholder}
         style={{
           transform: `translate(calc(50% + ${x}px), ${y + circleR + vSpacing}px)`,
         }}
         filter="url(#f3)"
-        onMouseDown={magic}
+        onClick={magic}
       />
       <g className={styles.placeholderIcon}>
         <line

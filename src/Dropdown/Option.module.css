@@ -1,0 +1,17 @@
+.option {
+  height: 48px;
+  display: flex;
+  align-items: center;
+  transition: background-color .1s, color .1s;
+  cursor: pointer;
+  padding: 0 30px;
+  color: black;
+  font-size: 14px;
+  font-family: Roboto;
+  font-weight: 500;
+}
+
+.option:hover {
+  background-color: #535E68;
+  color: white;
+}
