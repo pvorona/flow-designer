@@ -2,7 +2,7 @@ import React, { Fragment } from 'react'
 import { columnHeight, vSpacing } from '../constants'
 import { observer } from 'mobx-react'
 import { action } from 'mobx'
-import { dropdownState, editState } from '../Store'
+import { dropdownState, editState, zoomState } from '../Store'
 import styles from './Placeholder.module.css'
 
 const circleR = (columnHeight - 2 * vSpacing) / 2
@@ -17,7 +17,7 @@ function PlaceholderComponent ({ component }) {
     dropdownState.show()
     dropdownState.setPosition({
       left: element.current.getBoundingClientRect().left + circleR,
-      top: element.current.getBoundingClientRect().top + circleR * 2 + 10,
+      top: element.current.getBoundingClientRect().top + circleR * 2 * zoomState.scale + 10,
     })
     editState.edit(component)
   })

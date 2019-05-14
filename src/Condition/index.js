@@ -3,7 +3,7 @@ import { observer } from 'mobx-react'
 import { Task } from '../Task'
 import { PolymorphicComponent } from '../PolymorphicComponent'
 import { columnHeight, vSpacing } from '../constants'
-import { calculateMaxBranchingLevel } from '../calculateGeometry'
+import { calculateMaxBranchingLevel } from '../util'
 
 const lineStroke = '#C3C3C3'
 

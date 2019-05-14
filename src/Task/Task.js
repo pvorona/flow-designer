@@ -1,8 +1,8 @@
 // @flow
 import type { CoordsType } from './calculateGeometry'
 import React from 'react'
-import { hSpacing, vSpacing, columnWidth, columnHeight } from './constants'
 import { observer } from 'mobx-react'
+import { hSpacing, vSpacing, columnWidth, columnHeight } from '../constants'
 
 type Props = {
   component: {

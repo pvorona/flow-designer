@@ -1,6 +1,5 @@
 // @flow
-import { tribonacci } from './tribonacci'
-import { columnWidth, columnHeight, horizontalShift } from './constants'
+import { columnWidth, columnHeight, horizontalShift } from '../constants'
 
 type IdType = string | number
 
