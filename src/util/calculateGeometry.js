@@ -65,7 +65,7 @@ export function calculateMaxBranchingLevel (
   component: ComponentType,
   level: number = 0,
 ) : number {
-  if (component.type === 'task' || component.type === 'placeholder') {
+  if (component.type === 'bot' || component.type === 'human' || component.type === 'placeholder') {
     return level
   } else if (component.type === 'condition') {
     return Math.max(
@@ -80,7 +80,7 @@ export function getDeepestCondition (
   component: ComponentType,
   level: number = 0,
 ) : ComponentType {
-  if (component.type === 'task' || component.type === 'placeholder') {
+  if (component.type === 'bot' || component.type === 'human' || component.type === 'placeholder') {
     return component
   } else if (component.type === 'condition') {
     if (calculateMaxBranchingLevel(component.left) > calculateMaxBranchingLevel(component.right)) {
@@ -92,30 +92,6 @@ export function getDeepestCondition (
     // need to retern different branches depending on where this geometry should go
   }
   throw Error('Invalid component type provided to calculateHorizontalShift.')
-}
-
-function maxLeftShift (component, level = 0) : number {
-  if (component.type === 'task' || component.type === 'placeholder') {
-    return level
-  } else if (component.type === 'condition') {
-    return Math.max(
-      maxLeftShift(component.left, level + 1),
-      maxLeftShift(component.right, level - 1),
-    )
-  }
-  throw Error('!')
-}
-
-function maxRightShift (component, level = 0) : number {
-  if (component.type === 'task' || component.type === 'placeholder') {
-    return level
-  } else if (component.type === 'condition') {
-    return Math.max(
-      maxRightShift(component.right, level + 1),
-      maxRightShift(component.left, level - 1),
-    )
-  }
-  throw Error('!')
 }
 
 export function getWidth (component) {
@@ -176,7 +152,7 @@ export function calculateGeometry1 (
       ...geometry,
       ...calculateGeometry(component, geometry.level),
     }), { level: 0 })
-  } else if (component.type === 'task' || component.type === 'placeholder') {
+  } else if (component.type === 'bot' || component.type === 'human' || component.type === 'placeholder') {
     return {
       [component.id]: calculatePosition(level, horizontalLayer),
       level: level + 1,

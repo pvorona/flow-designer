@@ -1,0 +1,21 @@
+.rectangle {
+  fill: white;
+  filter: url(#component-shadow);
+}
+
+.type {
+  fill: rgba(39, 43, 48, .4);
+  font-size: 12px;
+  user-select: none;
+}
+
+.title {
+  font-weight: bold;
+  fill: #3B424A;
+  font-size: 14px;
+  user-select: none;
+}
+
+.more {
+  fill: #BCBCBC;
+}

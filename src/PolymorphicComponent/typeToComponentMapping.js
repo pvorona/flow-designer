@@ -3,7 +3,8 @@ import { Condition } from '../Condition'
 import { Placeholder } from '../Placeholder'
 
 export const typeToComponentMapping = {
-  task: Task,
+  bot: Task,
+  human: Task,
   condition: Condition,
   placeholder: Placeholder,
 }

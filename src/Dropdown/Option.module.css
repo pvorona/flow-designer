@@ -9,6 +9,7 @@
   font-size: 14px;
   font-family: Roboto;
   font-weight: 500;
+  white-space: nowrap;
 }
 
 .option:hover {

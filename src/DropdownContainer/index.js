@@ -7,7 +7,7 @@ export const DropdownContainerComponent = () =>
   dropdownState.visible ? (
     <AutoHideDropdown style={{...dropdownState.position}}>
       <Option onClick={createBotTask}>Bot Task</Option>
-      <Option onClick={createBotTask}>Manual Task</Option>
+      <Option onClick={createHumanTask}>Human Task</Option>
       <Option onClick={createCondition}>Condition</Option>
     </AutoHideDropdown>
   ) : null
@@ -32,5 +32,10 @@ function createCondition () {
 
 function createBotTask () {
   dropdownState.hide()
-  editState.component.type = 'task'
+  editState.component.type = 'bot'
+}
+
+function createHumanTask () {
+  dropdownState.hide()
+  editState.component.type = 'human'
 }
