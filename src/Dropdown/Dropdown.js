@@ -1,12 +1,15 @@
 import React, { useEffect } from 'react'
+import { dropdownState } from '../Store'
 import styles from './Dropdown.module.css'
+
+function stopPropagation (e) {
+  e.stopPropagation()
+}
 
 export const Dropdown = (props) =>
   <div
     className={styles.dropdown}
-    onMouseDown={(e) => {
-      e.stopPropagation()
-    }}
+    onMouseDown={stopPropagation}
     {...props}
   />
 
@@ -20,7 +23,7 @@ export const AutoHideDropdown = (props) => {
   }, [])
 
   function hideDropdown () {
-    window.dropdownState.hide()
+    dropdownState.hide()
   }
 
   return (
