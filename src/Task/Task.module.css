@@ -5,12 +5,23 @@
 .rectangle {
   fill: white;
   filter: url(#component-shadow);
+  transition: fill .1s;
+}
+
+.container:hover .rectangle {
+  fill: #535E68;
 }
 
 .type {
-  fill: rgba(39, 43, 48, .4);
+  fill: rgb(39, 43, 48);
+  opacity: .4;
   font-size: 12px;
   user-select: none;
+  transition: fill .1s;
+}
+
+.container:hover .type {
+  fill: white;
 }
 
 .title {
@@ -18,8 +29,22 @@
   fill: #3B424A;
   font-size: 14px;
   user-select: none;
+  transition: fill .1s;
+}
+
+.container:hover .title {
+  fill: white;
 }
 
 .more {
   fill: #BCBCBC;
+}
+
+.icon {
+  fill: #929292;
+  transition: fill .1s;
+}
+
+.container:hover .icon {
+  fill: white;
 }
