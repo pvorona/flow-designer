@@ -12,9 +12,6 @@ export const Condition = observer(({ component }) => {
     <g>
       <Task
         component={component}
-        onClick={(e) => {
-          window.removeComponent(component)}
-        }
       />
       <PolymorphicComponent
         component={component.left}

@@ -1,6 +1,6 @@
-import type { CoordsType } from './calculateGeometry'
 import React from 'react'
 import { observer } from 'mobx-react'
+import { sidebarState } from '../Store'
 import { hSpacing, vSpacing, columnWidth, columnHeight } from '../constants'
 import styles from './Task.module.css'
 
@@ -43,14 +43,19 @@ const typeIconMapping = {
   human: HumanIcon,
 }
 
-export const Task = observer(function Task ({
-  onClick,
-  component: { type, id, coords: { x, y } }
-}) {
+export const Task = observer(function Task ({ component }) {
+  const { type, id, coords: { x, y } } = component
   const Icon = typeIconMapping[type]
 
+  function onClick () {
+    sidebarState.setFocusedNode(component)
+  }
+
   return (
-    <g onClick={onClick}>
+    <g
+      onClick={onClick}
+      className={styles.container}
+    >
       <rect
         style={{
           transform: `translate(${x + hSpacing - columnWidth / 2}px, ${y + vSpacing}px)`,

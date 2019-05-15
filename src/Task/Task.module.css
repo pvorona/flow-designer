@@ -1,3 +1,7 @@
+.container {
+  cursor: pointer;
+}
+
 .rectangle {
   fill: white;
   filter: url(#component-shadow);

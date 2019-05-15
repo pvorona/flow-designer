@@ -5,11 +5,12 @@ import { observable } from 'mobx'
 import { observer } from 'mobx-react'
 import { action } from 'mobx'
 import { calculateGeometry } from './util'
-import { dragState } from './Store'
+import { dragState, sidebarState } from './Store'
 import { Defs } from './Defs'
 import { Root } from './Root'
 import { ZoomControls } from './ZoomControls'
 import { DropdownContainer } from './DropdownContainer'
+import { SidebarContainer } from './SidebarContainer'
 
 const root = observable({
   type: 'sequence',
@@ -76,20 +77,6 @@ const onMouseUp = action(function onMouseUp () {
   dragState.isDragging = false
 })
 
-const sidebarState = observable({
-  visible: false,
-  focusedNode: undefined,
-})
-
-window.setFocusedNode = function setFocusedNode (node) {
-  sidebarState.visible = true
-  sidebarState.focusedNode = node
-}
-
-window.hideSidebar = function hideSidebar () {
-  sidebarState.visible = false
-}
-
 export default observer(function App () {
   return (
     <div className="container">
@@ -109,22 +96,7 @@ export default observer(function App () {
         <Root component={root} />
       </svg>
       <ZoomControls />
-      {/* {sidebarState.visible ? ( */}
-      {/*   <div */}
-      {/*     style={{ */}
-      {/*       width: 340, */}
-      {/*       height: '100%', */}
-      {/*       boxShadow: '0 2px 6px 0 rgba(200,196,187,0.5)', */}
-      {/*       position: 'fixed', */}
-      {/*       right: 0, */}
-      {/*       top: 0, */}
-      {/*       background: 'white', */}
-      {/*     }} */}
-      {/*   > */}
-      {/*     <div>{sidebarState.focusedNode.type}</div> */}
-      {/*     <div>{sidebarState.focusedNode.id}</div> */}
-      {/*   </div> */}
-      {/* ) : null} */}
+      <SidebarContainer />
       <DropdownContainer />
     </div>
   )

@@ -1,0 +1,48 @@
+.container {
+  width: 340px;
+  height: 100%;
+  box-shadow: 0 2px 6px 0 rgba(200,196,187,0.5);
+  position: fixed;
+  right: 0;
+  top: 0;
+  background-color: white;
+  transition: transform .2s;
+  padding: 30px 20px;
+}
+
+.visible {
+  transform: translateX(0);
+}
+
+.hidden {
+  transform: translateX(100%);
+}
+
+.header {
+  display: flex;
+}
+
+.type {
+  color: #3B424A;
+  font-size: 12px;
+}
+
+.title {
+  margin-top: 5px;
+  font-size: 18px;
+  color: #3B424A;
+  font-family: Hellix;
+  font-weight: 600;
+}
+
+.closeIcon {
+  flex-shrink: 0;
+  color: #272B30;
+  opacity: .5;
+  transition: opacity .1s;
+  cursor: pointer;
+}
+
+.closeIcon:hover {
+  opacity: 1;
+}
