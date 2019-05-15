@@ -19,7 +19,7 @@ const SidebarContainerComponent = () => {
               typeTitleMapping[sidebarState.focusedNode.type]
             }</div>
             <div className={styles.title}>
-              Extract people, companies and countries {sidebarState.focusedNode.id}
+              {sidebarState.focusedNode.title}
             </div>
           </div>
           <svg

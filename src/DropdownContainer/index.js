@@ -18,6 +18,7 @@ let uniqId = 0
 
 function createCondition () {
   dropdownState.hide()
+  editState.component.title = 'New Condition'
   editState.component.type = 'condition'
   editState.component.left = {
     type: 'placeholder',
@@ -33,9 +34,11 @@ function createCondition () {
 function createBotTask () {
   dropdownState.hide()
   editState.component.type = 'bot'
+  editState.component.title = 'New Bot Task'
 }
 
 function createHumanTask () {
   dropdownState.hide()
   editState.component.type = 'human'
+  editState.component.title = 'New Human Task'
 }

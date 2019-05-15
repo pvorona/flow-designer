@@ -44,7 +44,7 @@ const typeIconMapping = {
 }
 
 export const Task = observer(function Task ({ component }) {
-  const { type, id, coords: { x, y } } = component
+  const { type, title, coords: { x, y } } = component
   const Icon = typeIconMapping[type]
 
   function onClick () {
@@ -83,7 +83,7 @@ export const Task = observer(function Task ({ component }) {
         }}
         className={styles.title}
       >
-        {['Collect records to process', 'Extract people'][id % 2]}
+        {title}
       </text>
       <path
         style={{
