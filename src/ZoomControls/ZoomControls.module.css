@@ -5,24 +5,34 @@
   height: 40px;
   box-shadow: 0 2px 8px 0 rgba(0,0,0,0.25);
   border-radius: 25px;
+  display: flex;
+  align-items: center;
+}
+
+.zoomControl {
+  height: 40px;
+  padding: 0 25px;
+  font-size: 24px;
+  cursor: pointer;
+  outline: none;
+  color: #9DA1A5;
+  border: none;
+  user-select: none;
+  transition: color .2s;
+}
+
+.zoomControl:hover {
+  color: #272B30;
 }
 
 .zoomIn {
   border-radius: 25px 0 0 25px;
-  height: 40px;
-  padding: 0 25px;
-  font-size: 24px;
-  cursor: pointer;
-  outline: none;
-  color: #9DA1A5;
 }
 
 .zoomOut {
   border-radius: 0 25px 25px 0;
-  height: 40px;
-  padding: 0 25px;
-  font-size: 24px;
-  cursor: pointer;
-  outline: none;
-  color: #9DA1A5;
+}
+
+.searchIcon {
+  fill: #9DA1A5;
 }
