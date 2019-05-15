@@ -16,3 +16,14 @@
   background-color: #535E68;
   color: white;
 }
+
+.icon {
+  margin-right: 15px;
+  margin-left: -5px;
+  transition: fill .1s;
+  width: 28px;
+}
+
+.option:hover .icon {
+  fill: white;
+}
