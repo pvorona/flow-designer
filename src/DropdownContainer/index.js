@@ -50,8 +50,13 @@ function createCondition () {
 
 function createBotTask () {
   dropdownState.hide()
-  editState.component.type = 'bot'
-  editState.component.title = 'New Bot Task'
+  editState.component.type = 'sequence'
+  editState.component.components = [
+    { type: 'placeholder', id: ++uniqId },
+    { type: 'bot', title: 'New Bot Task', id: ++uniqId },
+    { type: 'placeholder', id: ++uniqId },
+  ]
+  window.kek()
 }
 
 function createHumanTask () {
