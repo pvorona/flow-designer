@@ -1,3 +1,17 @@
+@font-face {
+  font-weight: normal;
+  font-style: normal;
+  font-family: Hellix;
+  src: url(/fonts/Hellix-Regular.otf) format('opentype');
+}
+
+@font-face {
+  font-weight: bold;
+  font-style: normal;
+  font-family: Hellix;
+  src: url(/fonts/Hellix-Bold.otf) format('opentype');
+}
+
 body {
   margin: 0;
   padding: 0;
