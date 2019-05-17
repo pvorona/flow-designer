@@ -105,24 +105,26 @@ function wow (n: number) : number {
 
 
 export function calculateGeometry (tree: ComponentType) {
-  if (tree.type === 'sequence') {
-    tree.components.forEach(calculateGeometry)
-  }
-
   let i = 0
   calculateGeometryKnuth(tree, 0)
-  centerTree(tree)
+  // centerTree(tree)
   function calculateGeometryKnuth (tree, depth = 0) {
-    if (tree.type === 'condition' && tree.left) {
-      calculateGeometryKnuth(tree.left, depth + 1)
-    }
-    tree.coords = calculatePosition(
-      depth,
-      i * horizontalShift,
-    )
-    i = i + 1
-    if (tree.type === 'condition' && tree.right) {
-      calculateGeometryKnuth(tree.right, depth + 1)
+    if (tree.type === 'sequence') {
+      tree.components.forEach((component, index) => {
+        calculateGeometryKnuth(component, depth + index)
+      })
+    } else {
+      if (tree.type === 'condition') {
+        calculateGeometryKnuth(tree.left, depth + 1)
+      }
+      tree.coords = calculatePosition(
+        depth,
+        i * horizontalShift,
+      )
+      i = i + 1
+      if (tree.type === 'condition') {
+        calculateGeometryKnuth(tree.right, depth + 1)
+      }
     }
   }
 }
