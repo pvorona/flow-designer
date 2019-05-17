@@ -5,7 +5,7 @@ import { observable } from 'mobx'
 import { observer } from 'mobx-react'
 import { action } from 'mobx'
 import { calculateGeometry } from './util'
-import { dragState, sidebarState } from './Store'
+import { dragState } from './Store'
 import { Defs } from './Defs'
 import { Root } from './Root'
 import { ZoomControls } from './ZoomControls'
@@ -17,6 +17,7 @@ const root = observable({
   id: -1,
   components: [
     { type: 'placeholder', id: 0 },
+    { type: 'placeholder', id: 1 },
   ],
 })
 calculateGeometry(root)
