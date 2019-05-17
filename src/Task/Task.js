@@ -59,7 +59,7 @@ export const Task = observer(function Task ({ component }) {
   return (
     <g
       onClick={onClick}
-      className={`${styles.container} ${sidebarState.focusedNode === component ? styles.focused : ''}`}
+      className={`${styles.container} ${(sidebarState.focusedNode === component && sidebarState.visible) ? styles.focused : ''}`}
     >
       <rect
         style={{
