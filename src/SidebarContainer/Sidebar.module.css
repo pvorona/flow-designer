@@ -95,12 +95,14 @@
   border-radius: 2px;
   background-color: #535E68;
   color: rgba(255, 255, 255, 0.8);
-  padding: 0 2px;
   margin-bottom: 6px;
+  padding: 4px 8px;
+  font-size: 12px;
 }
 
 .label {
   color: #3B424A;
+  margin-bottom: 5px;
   font-family: Roboto;
   font-size: 13px;
   line-height: 15px;
@@ -108,10 +110,12 @@
 
 .param {
   width: 100%;
+  padding: 0 10px;
+  box-sizing: border-box;
   height: 32px;
   border: 1px solid #DBDBDB;
   border-radius: 2px;
-  font-size: 18px;
+  font-size: 13px;
   color: #3B424A;
   font-family: Hellix;
   font-weight: 600;
