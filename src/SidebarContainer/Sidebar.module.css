@@ -24,6 +24,7 @@
 .header {
   display: flex;
   justify-content: space-between;
+  margin-bottom: 20px;
 }
 
 .type {
@@ -33,14 +34,28 @@
 
 .title {
   margin-top: 5px;
+  height: 32px;
   font-size: 18px;
   color: #3B424A;
   font-family: Hellix;
   font-weight: 600;
+  outline: none;
+  border: none;
+  width: 100%;
+  text-overflow: ellipsis;
+}
+
+.title:focus {
+  box-shadow: 0 0 0 1px #DBDBDB;
+}
+
+.title::selection {
+  background-color: #8080807a;
 }
 
 .closeIcon {
   flex-shrink: 0;
+  margin-left: 10px;
   color: #272B30;
   opacity: .5;
   transition: opacity .1s;
@@ -64,4 +79,43 @@
 
 .deleteIcon:hover {
   opacity: 1;
+}
+
+.interface {
+  color: #272B30;
+  font-family: Roboto;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 16px;
+  margin-bottom: 10px;
+  margin-top: 20px;
+}
+
+.interfaceValue {
+  border-radius: 2px;
+  background-color: #535E68;
+  color: rgba(255, 255, 255, 0.8);
+  padding: 0 2px;
+  margin-bottom: 6px;
+}
+
+.label {
+  color: #3B424A;
+  font-family: Roboto;
+  font-size: 13px;
+  line-height: 15px;
+}
+
+.param {
+  width: 100%;
+  height: 32px;
+  border: 1px solid #DBDBDB;
+  border-radius: 2px;
+  font-size: 18px;
+  color: #3B424A;
+  font-family: Hellix;
+  font-weight: 600;
+  outline: none;
+  width: 100%;
+  text-overflow: ellipsis;
 }

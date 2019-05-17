@@ -22,7 +22,11 @@ const HumanIcon = (props) =>
 const ComplexOption = (props) =>
   <div style={{ padding: '10px 0' }} {...props} />
 
-const factories = [createBotTask, createHumanTask, createCondition]
+const factories = [
+  (title) => () => createBotTask(title),
+  (title) => () => createHumanTask(title),
+  (title) => () => createCondition(title),
+]
 
 export const DropdownContainer = () => {
   const [index, setIndex] = useState(0)
@@ -49,7 +53,7 @@ export const DropdownContainer = () => {
               margin: '-20px 0',
             }} />
             <div>
-              <Option onClick={factories[index]}>
+              <Option onClick={factories[index](`Get analytics ${index}`)}>
                 <ComplexOption>
                   Get analytics {index}
                   <Description>
@@ -57,7 +61,7 @@ export const DropdownContainer = () => {
                   </Description>
                 </ComplexOption>
               </Option>
-              <Option onClick={factories[index]}>
+              <Option onClick={factories[index](`Extract people, companies and countries ${index}`)}>
                 <ComplexOption>
                   Extract people, companies and countries {index}
                   <Description>
@@ -65,7 +69,7 @@ export const DropdownContainer = () => {
                   </Description>
                 </ComplexOption>
               </Option>
-              <Option onClick={factories[index]}>
+              <Option onClick={factories[index](`Generate message ${index}`)}>
                 <ComplexOption>
                   Generate message {index}
                   <Description>
@@ -73,7 +77,7 @@ export const DropdownContainer = () => {
                   </Description>
                 </ComplexOption>
               </Option>
-              <Option onClick={factories[index]}>
+              <Option onClick={factories[index](`Get consolidated results ${index}`)}>
                 <ComplexOption>
                   Get consolidated results {index}
                   <Description>
@@ -81,7 +85,7 @@ export const DropdownContainer = () => {
                   </Description>
                 </ComplexOption>
               </Option>
-              <Option onClick={factories[index]}>
+              <Option onClick={factories[index](`Prepare data ${index}`)}>
                 <ComplexOption>
                   Prepare data {index}
                   <Description>
@@ -100,9 +104,9 @@ export const DropdownContainer = () => {
 
 let uniqId = 0
 
-function createCondition () {
+function createCondition (title) {
   dropdownState.hide()
-  editState.component.title = 'New Condition'
+  editState.component.title = title
   editState.component.type = 'condition'
   editState.component.left = {
     type: 'placeholder',
@@ -115,14 +119,14 @@ function createCondition () {
   window.kek()
 }
 
-function createBotTask () {
+function createBotTask (title) {
   dropdownState.hide()
   editState.component.type = 'bot'
-  editState.component.title = 'New Bot Task'
+  editState.component.title = title
 }
 
-function createHumanTask () {
+function createHumanTask (title) {
   dropdownState.hide()
   editState.component.type = 'human'
-  editState.component.title = 'New Human Task'
+  editState.component.title = title
 }

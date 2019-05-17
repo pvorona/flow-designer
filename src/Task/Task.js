@@ -48,6 +48,10 @@ const typeIconMapping = {
   human: HumanIcon,
 }
 
+function trimTitleIfNeeded (title) {
+  return title.length < 20 ? title : title.slice(0, 19) + '...'
+}
+
 export const Task = observer(function Task ({ component }) {
   const { type, title, coords: { x, y } } = component
   const Icon = typeIconMapping[type]
@@ -88,7 +92,7 @@ export const Task = observer(function Task ({ component }) {
         }}
         className={styles.title}
       >
-        {title}
+        {trimTitleIfNeeded(title)}
       </text>
       <path
         style={{
