@@ -22,6 +22,8 @@ function PlaceholderComponent ({ component }) {
     editState.edit(component)
   })
 
+  if (!x) debugger
+
   return (
     <Fragment>
       <circle
