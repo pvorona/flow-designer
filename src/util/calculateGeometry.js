@@ -65,7 +65,12 @@ export function calculateMaxBranchingLevel (
   component: ComponentType,
   level: number = 0,
 ) : number {
-  if (component.type === 'bot' || component.type === 'human' || component.type === 'placeholder') {
+  if (component.type === 'sequence') {
+    return component.components.reduce(
+      (depth, component) => depth + calculateMaxBranchingLevel(component),
+      0,
+    )
+  } else if (component.type === 'bot' || component.type === 'human' || component.type === 'placeholder') {
     return level
   } else if (component.type === 'condition') {
     return Math.max(
@@ -106,15 +111,21 @@ function wow (n: number) : number {
 
 export function calculateGeometry (tree: ComponentType) {
   if (tree.type === 'sequence') {
-    tree.components.forEach(calculateGeometry)
+    let depth = 0
+    for (let i = 0; i < tree.components.length; i++) {
+      let j = 0
+      calculateGeometryKnuth(tree.components[i], j, depth)
+      centerTree(tree.components[i], tree.components[i].coords.x)
+      depth += calculateMaxBranchingLevel(tree.components[i]) + 1
+    }
+    return
   }
 
-  let i = 0
-  calculateGeometryKnuth(tree, 0)
-  centerTree(tree)
-  function calculateGeometryKnuth (tree, depth = 0) {
+  // calculateGeometryKnuth(tree, 0)
+  // centerTree(tree)
+  function calculateGeometryKnuth (tree, i, depth = 0) {
     if (tree.type === 'condition' && tree.left) {
-      calculateGeometryKnuth(tree.left, depth + 1)
+      i = calculateGeometryKnuth(tree.left, i, depth + 1)
     }
     tree.coords = calculatePosition(
       depth,
@@ -122,13 +133,14 @@ export function calculateGeometry (tree: ComponentType) {
     )
     i = i + 1
     if (tree.type === 'condition' && tree.right) {
-      calculateGeometryKnuth(tree.right, depth + 1)
+      i = calculateGeometryKnuth(tree.right, i, depth + 1)
     }
+    return i
   }
 }
 
-function centerTree (component) {
-  const centerNodeShift = component.coords.x
+function centerTree (component, centerNodeShift) {
+  // const centerNodeShift = component.coords.x
   a(component)
   function a (tree) {
     if (tree.type === 'condition') {
