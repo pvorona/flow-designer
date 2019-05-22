@@ -1,5 +1,5 @@
 // @flow
-import { columnWidth, columnHeight, horizontalShift } from '../constants'
+import { columnWidth, columnHeight, horizontalShift, vSpacing } from '../constants'
 
 type IdType = string | number
 
@@ -49,10 +49,11 @@ type Size = {
 function calculatePosition (
   verticalLevel: number,
   horizontalLayer: number = 0,
+  yOffset: ?number = 0,
 ) : CoordsType {
   return {
     x: horizontalLayer * columnWidth,
-    y: verticalLevel * columnHeight,
+    y: verticalLevel * columnHeight + yOffset,
   }
 }
 
@@ -112,10 +113,13 @@ function wow (n: number) : number {
 export function calculateGeometry (tree: ComponentType) {
   if (tree.type === 'sequence') {
     let depth = 0
+    let yOffset = 0
     for (let i = 0; i < tree.components.length; i++) {
       let j = 0
-      calculateGeometryKnuth(tree.components[i], j, depth)
+      console.log(calculateMaxBranchingLevel(tree.components[i]))
+      calculateGeometryKnuth(tree.components[i], j, depth, yOffset)
       centerTree(tree.components[i], tree.components[i].coords.x)
+      yOffset += vSpacing * (calculateMaxBranchingLevel(tree.components[i]) - 1)
       depth += calculateMaxBranchingLevel(tree.components[i]) + 1
     }
     return
@@ -123,17 +127,18 @@ export function calculateGeometry (tree: ComponentType) {
 
   // calculateGeometryKnuth(tree, 0)
   // centerTree(tree)
-  function calculateGeometryKnuth (tree, i, depth = 0) {
+  function calculateGeometryKnuth (tree, i, depth = 0, yOffset = 0) {
     if (tree.type === 'condition' && tree.left) {
-      i = calculateGeometryKnuth(tree.left, i, depth + 1)
+      i = calculateGeometryKnuth(tree.left, i, depth + 1, yOffset)
     }
     tree.coords = calculatePosition(
       depth,
       i * horizontalShift,
+      yOffset,
     )
     i = i + 1
     if (tree.type === 'condition' && tree.right) {
-      i = calculateGeometryKnuth(tree.right, i, depth + 1)
+      i = calculateGeometryKnuth(tree.right, i, depth + 1, yOffset)
     }
     return i
   }

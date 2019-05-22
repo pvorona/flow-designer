@@ -3,6 +3,7 @@ import { Observer } from 'mobx-react'
 import { AutoHideDropdown, Option, Description } from '../Dropdown'
 import { dropdownState, editState } from '../Store'
 import styles from '../Dropdown/Option.module.css'
+import { root } from '../App'
 
 const ConditionIcon = (props) =>
   <svg width="28px" height="26px" className={styles.icon}>
@@ -106,6 +107,14 @@ let uniqId = 0
 
 function createCondition (title) {
   dropdownState.hide()
+  if (editState.inSequence) {
+    if (root.components[0] === editState.component) {
+      root.components.unshift({ type: 'placeholder', id: ++uniqId })
+    }
+    if (root.components[root.components.length - 1] === editState.component) {
+      root.components.push({ type: 'placeholder', id: ++uniqId })
+    }
+  }
   editState.component.title = title
   editState.component.type = 'condition'
   editState.component.left = {
@@ -121,12 +130,35 @@ function createCondition (title) {
 
 function createBotTask (title) {
   dropdownState.hide()
+  console.log(editState)
+  if (editState.inSequence) {
+    if (root.components[0] === editState.component) {
+      root.components.unshift({ type: 'placeholder', id: ++uniqId })
+    }
+    if (root.components[root.components.length - 1] === editState.component) {
+      root.components.push({ type: 'placeholder', id: ++uniqId })
+    }
+  }
+
   editState.component.type = 'bot'
   editState.component.title = title
+  window.kek()
+
 }
 
 function createHumanTask (title) {
   dropdownState.hide()
+  if (editState.inSequence) {
+    if (root.components[0] === editState.component) {
+      root.components.unshift({ type: 'placeholder', id: ++uniqId })
+    }
+    if (root.components[root.components.length - 1] === editState.component) {
+      root.components.push({ type: 'placeholder', id: ++uniqId })
+    }
+  }
+
   editState.component.type = 'human'
   editState.component.title = title
+  window.kek()
+
 }

@@ -2,8 +2,10 @@ import { observable } from 'mobx'
 
 export const editState = observable({
   component: undefined,
-  edit (component) {
+  inSequence: false,
+  edit (component, inSequence) {
     this.component = component
+    this.inSequence = inSequence
   }
 })
 

@@ -9,7 +9,7 @@ const circleR = (columnHeight - 2 * vSpacing) / 2
 const iconPadding = 15
 const strokeWidth = 3
 
-function PlaceholderComponent ({ component }) {
+function PlaceholderComponent ({ component, inSequence }) {
   const { coords: { x, y } } = component
   const element = React.createRef()
 
@@ -19,10 +19,8 @@ function PlaceholderComponent ({ component }) {
       left: element.current.getBoundingClientRect().left + circleR,
       top: element.current.getBoundingClientRect().top + circleR * 2 * zoomState.scale + 10,
     })
-    editState.edit(component)
+    editState.edit(component, inSequence)
   })
-
-  if (!x) debugger
 
   return (
     <Fragment>
