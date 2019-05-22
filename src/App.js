@@ -12,14 +12,11 @@ import { ZoomControls } from './ZoomControls'
 import { DropdownContainer } from './DropdownContainer'
 import { SidebarContainer } from './SidebarContainer'
 
-const root = observable({
+export const root = window.seq = observable({
   type: 'sequence',
   id: -1,
   components: [
     { type: 'placeholder', id: 0 },
-    { type: 'placeholder', id: 1 },
-    { type: 'placeholder', id: 2 },
-    { type: 'placeholder', id: 3 },
   ],
 })
 calculateGeometry(root)

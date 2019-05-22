@@ -13,12 +13,10 @@ const RootComponent = ({ component }) => {
       transition: dragState.isDragging ? undefined : 'transform .2s',
       willChange: 'transform',
     }}>
-      {component.components.map(component =>
-        <PolymorphicComponent
-          key={component.id}
-          component={component}
-        />
-      )}
+      <PolymorphicComponent
+        key={component.id}
+        component={component}
+      />
     </g>
   )
 }
