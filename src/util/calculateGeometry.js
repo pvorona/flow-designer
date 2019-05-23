@@ -116,7 +116,6 @@ export function calculateGeometry (tree: ComponentType) {
     let yOffset = 0
     for (let i = 0; i < tree.components.length; i++) {
       let j = 0
-      console.log(calculateMaxBranchingLevel(tree.components[i]))
       calculateGeometryKnuth(tree.components[i], j, depth, yOffset)
       centerTree(tree.components[i], tree.components[i].coords.x)
       yOffset += vSpacing * (calculateMaxBranchingLevel(tree.components[i]) - 1)

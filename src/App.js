@@ -20,7 +20,6 @@ export const root = window.seq = observable({
   ],
 })
 calculateGeometry(root)
-console.log(root)
 // let coords = calculateGeometry(root)
 
 function recalculateGeometry () {
@@ -42,19 +41,22 @@ function traverseTree (component, callback) {
 
 recalculateGeometry()
 window.kek = function () {
+  const newComponents = []
+  root.components.forEach(component => {
+    if (component.type === 'placeholder' && newComponents.length && newComponents[newComponents.length - 1].type === 'placeholder') {
+      return
+    }
+    newComponents.push(component)
+  })
+  root.components = newComponents
   calculateGeometry(root)
   // coords = calculateGeometry(root)
   // recalculateGeometry()
 }
 
 window.removeComponent = action(function removeComponent (component) {
-  traverseTree(root, (node) => {
-    if (node === component) {
-      node.type = 'placeholder'
-      window.kek()
-      return
-    }
-  })
+  component.type = 'placeholder'
+  window.kek()
 })
 
 const onMouseDown = action(function onMouseDown (e) {

@@ -130,7 +130,6 @@ function createCondition (title) {
 
 function createBotTask (title) {
   dropdownState.hide()
-  console.log(editState)
   if (editState.inSequence) {
     if (root.components[0] === editState.component) {
       root.components.unshift({ type: 'placeholder', id: ++uniqId })
